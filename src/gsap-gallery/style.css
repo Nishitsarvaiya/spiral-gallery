@@ -1,0 +1,135 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+:root {
+	--bg: #ffffff;
+	--ink: #0a0a0a;
+	--ink-mid: rgba(10, 10, 10, 0.45);
+	--ink-faint: rgba(10, 10, 10, 0.22);
+	--font: 'Helvetica Neue', Arial, sans-serif;
+}
+
+html,
+body {
+	width: 100%;
+	height: 100%;
+	background: var(--bg);
+	overflow: hidden;
+}
+
+/* ── Scroll driver ───────────────────────────────────────────── */
+.scroll-container {
+	position: fixed;
+	inset: 0;
+	overflow-y: scroll;
+	z-index: 10;
+	pointer-events: auto;
+	touch-action: pan-y;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+.scroll-container::-webkit-scrollbar { display: none; }
+.scroll-content {
+	height: 600vh;
+	pointer-events: none;
+}
+
+/* ── 3D scene ────────────────────────────────────────────────── */
+.gsap-scene {
+	position: fixed;
+	inset: 0;
+	/* perspective set dynamically in JS */
+	overflow: visible;
+}
+
+/* ── Gallery items ───────────────────────────────────────────── */
+.gsap-item {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	overflow: hidden;
+	will-change: transform, opacity;
+	backface-visibility: hidden;
+}
+
+.gsap-item img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	pointer-events: none;
+	user-select: none;
+	-webkit-user-drag: none;
+}
+
+/* ── UI layer ────────────────────────────────────────────────── */
+.counter,
+.minimap-wrap {
+	z-index: 20;
+	pointer-events: none;
+}
+
+/* ── Counter ─────────────────────────────────────────────────── */
+.counter {
+	position: fixed;
+	top: 1.8rem;
+	right: 2rem;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+.counter__current {
+	font-family: var(--font);
+	font-size: 0.65rem;
+	font-weight: 500;
+	letter-spacing: 0.1em;
+	color: var(--ink);
+}
+.counter__sep {
+	display: block;
+	width: 14px;
+	height: 1px;
+	background: var(--ink-faint);
+}
+.counter__total {
+	font-family: var(--font);
+	font-size: 0.65rem;
+	font-weight: 400;
+	letter-spacing: 0.1em;
+	color: var(--ink-faint);
+}
+
+/* ── Minimap ─────────────────────────────────────────────────── */
+.minimap-wrap {
+	position: fixed;
+	top: 50%;
+	right: 1.6rem;
+	translate: 0 -50%;
+	width: 70px;
+	height: 420px;
+}
+.minimap {
+	display: block;
+	width: 70px;
+	height: 420px;
+}
+.minimap-cursor {
+	position: absolute;
+	left: 0;
+	top: 50%;
+	translate: 0 -50%;
+	width: 100%;
+	box-sizing: border-box;
+	border: 1px solid rgba(0, 0, 0, 0.4);
+	pointer-events: none;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 992px) {
+	.minimap-wrap { display: none; }
+}

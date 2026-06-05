@@ -1,0 +1,288 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+:root {
+	--bg: #ffffff;
+	--ink: #0a0a0a;
+	--ink-mid: rgba(10, 10, 10, 0.45);
+	--ink-faint: rgba(10, 10, 10, 0.22);
+	--font: 'Helvetica Neue', Arial, sans-serif;
+}
+
+html,
+body {
+	width: 100%;
+	height: 100%;
+	background: var(--bg);
+	overflow: hidden;
+}
+
+#gl-canvas {
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.scroll-container {
+	position: fixed;
+	inset: 0;
+	overflow-y: scroll;
+	z-index: 10;
+	pointer-events: auto;
+	touch-action: pan-y;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+.scroll-container::-webkit-scrollbar {
+	display: none;
+}
+.scroll-content {
+	height: 600vh;
+	pointer-events: none;
+}
+
+/* all UI above canvas */
+.progress-bar,
+.micro-header,
+.corner,
+.focal-line,
+.counter,
+.meta,
+.minimap-wrap,
+.item-title,
+.scroll-label {
+	z-index: 20;
+	pointer-events: none;
+}
+
+/* ── Progress bar ────────────────────────────────────────────── */
+.progress-bar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	background: var(--ink-faint);
+}
+.progress-bar__fill {
+	height: 100%;
+	width: 0%;
+	background: var(--ink);
+	transition: width 0.1s linear;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.micro-header {
+	position: fixed;
+	top: 1.8rem;
+	left: 2rem;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+.micro-header__title {
+	font-family: var(--font);
+	font-size: 0.6rem;
+	font-weight: 600;
+	letter-spacing: 0.24em;
+	text-transform: uppercase;
+	color: var(--ink);
+}
+.micro-header__sub {
+	font-family: var(--font);
+	font-size: 0.5rem;
+	font-weight: 400;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: var(--ink-faint);
+}
+
+/* ── Focal crosshair ─────────────────────────────────────────── */
+.focal-line {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	translate: -50% -50%;
+	width: 28px;
+	height: 1px;
+	background: var(--ink-faint);
+}
+.focal-line::before,
+.focal-line::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	width: 1px;
+	height: 7px;
+	background: var(--ink-faint);
+	translate: 0 -50%;
+}
+.focal-line::before {
+	left: 0;
+}
+.focal-line::after {
+	right: 0;
+}
+
+/* ── Counter ─────────────────────────────────────────────────── */
+.counter {
+	position: fixed;
+	top: 1.8rem;
+	right: 2rem;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+.counter__current {
+	font-family: var(--font);
+	font-size: 0.65rem;
+	font-weight: 500;
+	letter-spacing: 0.1em;
+	color: var(--ink);
+}
+.counter__sep {
+	display: block;
+	width: 14px;
+	height: 1px;
+	background: var(--ink-faint);
+}
+.counter__total {
+	font-family: var(--font);
+	font-size: 0.65rem;
+	font-weight: 400;
+	letter-spacing: 0.1em;
+	color: var(--ink-faint);
+}
+
+/* ── Camera meta ─────────────────────────────────────────────── */
+.meta {
+	position: fixed;
+	top: 3.4rem;
+	right: 2rem;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+.meta__item {
+	font-family: var(--font);
+	font-size: 0.5rem;
+	font-weight: 400;
+	letter-spacing: 0.12em;
+	color: var(--ink-faint);
+}
+.meta__dot {
+	width: 2px;
+	height: 2px;
+	border-radius: 50%;
+	background: var(--ink-faint);
+	display: block;
+}
+
+/* ── Minimap film strip ──────────────────────────────────────── */
+.minimap-wrap {
+	position: fixed;
+	top: 50%;
+	right: 1.6rem;
+	translate: 0 -50%;
+	width: 70px;
+	height: 420px;
+}
+.minimap {
+	display: block;
+	width: 70px;
+	height: 420px;
+}
+.minimap-cursor {
+	position: absolute;
+	left: 0;
+	top: 50%;
+	translate: 0 -50%;
+	width: 100%;
+	box-sizing: border-box;
+	border: 1px solid rgba(0, 0, 0, 0.4);
+	pointer-events: none;
+}
+
+/* ── Mobile ──────────────────────────────────────────────────── */
+@media (max-width: 992px) {
+	.minimap-wrap {
+		display: none;
+	}
+}
+
+/* ── Item title ──────────────────────────────────────────────── */
+.item-title {
+	position: fixed;
+	bottom: 2.4rem;
+	left: 2rem;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	overflow: hidden;
+}
+.item-title__tag {
+	font-family: var(--font);
+	font-size: 0.5rem;
+	font-weight: 400;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: var(--ink-faint);
+}
+.item-title__name {
+	font-family: var(--font);
+	font-size: 1.6rem;
+	font-weight: 500;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--ink);
+	line-height: 1.15;
+}
+.item-title__sub {
+	font-family: var(--font);
+	font-size: 0.5rem;
+	font-weight: 400;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--ink-faint);
+}
+
+/* ── Scroll indicator ────────────────────────────────────────── */
+.scroll-label {
+	position: fixed;
+	bottom: 2rem;
+	right: 2rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 6px;
+}
+.scroll-label span {
+	font-family: var(--font);
+	font-size: 0.45rem;
+	font-weight: 400;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: var(--ink-faint);
+	writing-mode: vertical-lr;
+}
+.scroll-label__track {
+	width: 1px;
+	height: 44px;
+	background: var(--ink-faint);
+	position: relative;
+	overflow: hidden;
+}
+.scroll-label__thumb {
+	position: absolute;
+	top: -100%;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: var(--ink);
+}

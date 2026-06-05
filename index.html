@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Spiral Gallery</title>
+		<link rel="stylesheet" href="/src/style.css" />
+	</head>
+	<body>
+		<canvas id="gl-canvas"></canvas>
+
+		<div class="scroll-container">
+			<div class="scroll-content"></div>
+		</div>
+
+		<!-- Image counter -->
+		<div class="counter">
+			<span class="counter__current" id="js-counter">01</span>
+			<span class="counter__sep"></span>
+			<span class="counter__total">12</span>
+		</div>
+
+		<!-- Minimap — right centre -->
+		<div class="minimap-wrap" id="js-minimap-wrap">
+			<canvas class="minimap" id="js-minimap" width="70" height="420"></canvas>
+			<div class="minimap-cursor" id="js-minimap-cursor"></div>
+		</div>
+
+<script type="module" src="/src/main.js"></script>
+	</body>
+</html>
