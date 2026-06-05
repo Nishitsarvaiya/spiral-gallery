@@ -1,3 +1,11 @@
+@font-face {
+	font-family: 'OverusedGrotesk';
+	src: url('/OverusedGrotesk-VF.woff2') format('woff2');
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -11,7 +19,8 @@
 	--ink: #0a0a0a;
 	--ink-mid: rgba(10, 10, 10, 0.45);
 	--ink-faint: rgba(10, 10, 10, 0.22);
-	--font: 'Helvetica Neue', Arial, sans-serif;
+	--font: 'OverusedGrotesk', 'Helvetica Neue', Arial, sans-serif;
+	--font-mono: 'DM Mono', monospace;
 }
 
 html,
@@ -48,99 +57,23 @@ body {
 }
 
 /* all UI above canvas */
-.progress-bar,
-.micro-header,
-.corner,
-.focal-line,
 .counter,
-.meta,
-.minimap-wrap,
-.item-title,
-.scroll-label {
+.minimap-wrap {
 	z-index: 20;
 	pointer-events: none;
-}
-
-/* ── Progress bar ────────────────────────────────────────────── */
-.progress-bar {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 1px;
-	background: var(--ink-faint);
-}
-.progress-bar__fill {
-	height: 100%;
-	width: 0%;
-	background: var(--ink);
-	transition: width 0.1s linear;
-}
-
-/* ── Header ──────────────────────────────────────────────────── */
-.micro-header {
-	position: fixed;
-	top: 1.8rem;
-	left: 2rem;
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-}
-.micro-header__title {
-	font-family: var(--font);
-	font-size: 0.6rem;
-	font-weight: 600;
-	letter-spacing: 0.24em;
-	text-transform: uppercase;
-	color: var(--ink);
-}
-.micro-header__sub {
-	font-family: var(--font);
-	font-size: 0.5rem;
-	font-weight: 400;
-	letter-spacing: 0.2em;
-	text-transform: uppercase;
-	color: var(--ink-faint);
-}
-
-/* ── Focal crosshair ─────────────────────────────────────────── */
-.focal-line {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	translate: -50% -50%;
-	width: 28px;
-	height: 1px;
-	background: var(--ink-faint);
-}
-.focal-line::before,
-.focal-line::after {
-	content: '';
-	position: absolute;
-	top: 50%;
-	width: 1px;
-	height: 7px;
-	background: var(--ink-faint);
-	translate: 0 -50%;
-}
-.focal-line::before {
-	left: 0;
-}
-.focal-line::after {
-	right: 0;
 }
 
 /* ── Counter ─────────────────────────────────────────────────── */
 .counter {
 	position: fixed;
-	top: 1.8rem;
-	right: 2rem;
+	bottom: 2rem;
+	left: 2rem;
 	display: flex;
 	align-items: center;
 	gap: 6px;
 }
 .counter__current {
-	font-family: var(--font);
+	font-family: var(--font-mono);
 	font-size: 0.65rem;
 	font-weight: 500;
 	letter-spacing: 0.1em;
@@ -153,35 +86,39 @@ body {
 	background: var(--ink-faint);
 }
 .counter__total {
-	font-family: var(--font);
+	font-family: var(--font-mono);
 	font-size: 0.65rem;
 	font-weight: 400;
 	letter-spacing: 0.1em;
 	color: var(--ink-faint);
 }
 
-/* ── Camera meta ─────────────────────────────────────────────── */
-.meta {
+/* ── 3D scene ────────────────────────────────────────────────── */
+.gsap-scene {
 	position: fixed;
-	top: 3.4rem;
-	right: 2rem;
-	display: flex;
-	align-items: center;
-	gap: 5px;
+	inset: 0;
+	/* perspective set dynamically in JS */
+	overflow: visible;
 }
-.meta__item {
-	font-family: var(--font);
-	font-size: 0.5rem;
-	font-weight: 400;
-	letter-spacing: 0.12em;
-	color: var(--ink-faint);
+
+/* ── Gallery items ───────────────────────────────────────────── */
+.gsap-item {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	overflow: hidden;
+	will-change: transform, opacity;
+	backface-visibility: hidden;
 }
-.meta__dot {
-	width: 2px;
-	height: 2px;
-	border-radius: 50%;
-	background: var(--ink-faint);
+
+.gsap-item img {
 	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	pointer-events: none;
+	user-select: none;
+	-webkit-user-drag: none;
 }
 
 /* ── Minimap film strip ──────────────────────────────────────── */
@@ -216,73 +153,68 @@ body {
 	}
 }
 
-/* ── Item title ──────────────────────────────────────────────── */
-.item-title {
+/* ── Brand ───────────────────────────────────────────────────── */
+.brand {
 	position: fixed;
-	bottom: 2.4rem;
+	top: 1.8rem;
 	left: 2rem;
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
-	overflow: hidden;
+	z-index: 20;
+	pointer-events: none;
 }
-.item-title__tag {
-	font-family: var(--font);
-	font-size: 0.5rem;
-	font-weight: 400;
-	letter-spacing: 0.2em;
-	text-transform: uppercase;
-	color: var(--ink-faint);
-}
-.item-title__name {
-	font-family: var(--font);
-	font-size: 1.6rem;
+.brand__text {
+	font-family: var(--font-mono);
+	font-size: 1rem;
 	font-weight: 500;
-	letter-spacing: 0.06em;
 	text-transform: uppercase;
 	color: var(--ink);
-	line-height: 1.15;
-}
-.item-title__sub {
-	font-family: var(--font);
-	font-size: 0.5rem;
-	font-weight: 400;
-	letter-spacing: 0.16em;
-	text-transform: uppercase;
-	color: var(--ink-faint);
 }
 
-/* ── Scroll indicator ────────────────────────────────────────── */
-.scroll-label {
+/* ── Page label ──────────────────────────────────────────────── */
+.page-label {
 	position: fixed;
-	bottom: 2rem;
-	right: 2rem;
+	bottom: 1rem;
+	right: 1rem;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	gap: 6px;
+	align-items: flex-end;
+	gap: 5px;
+	z-index: 20;
+	pointer-events: none;
 }
-.scroll-label span {
+.page-label__title {
 	font-family: var(--font);
-	font-size: 0.45rem;
-	font-weight: 400;
-	letter-spacing: 0.2em;
+	font-size: 2.8rem;
+	font-weight: 500;
+	line-height: 1;
+	letter-spacing: -0.03em;
+	color: var(--ink);
 	text-transform: uppercase;
-	color: var(--ink-faint);
-	writing-mode: vertical-lr;
 }
-.scroll-label__track {
-	width: 1px;
-	height: 44px;
-	background: var(--ink-faint);
-	position: relative;
-	overflow: hidden;
+.page-label__sub {
+	font-family: var(--font);
+	font-size: 0.6rem;
+	font-weight: 400;
+	letter-spacing: 0.15em;
+	text-transform: uppercase;
+	color: var(--ink-mid);
 }
-.scroll-label__thumb {
-	position: absolute;
-	top: -100%;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: var(--ink);
+
+/* ── Page Links ──────────────────────────────────────────────── */
+.page-links {
+	position: fixed;
+	top: 2rem;
+	right: 2rem;
+	display: flex;
+	align-items: flex-end;
+	gap: 1rem;
+	z-index: 20;
+}
+
+.page-links a {
+	text-decoration: none;
+	font-family: var(--font-mono);
+	font-size: 0.8rem;
+	font-weight: 500;
+	text-transform: uppercase;
+	color: var(--ink);
 }

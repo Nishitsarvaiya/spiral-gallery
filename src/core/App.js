@@ -33,8 +33,9 @@ export class App {
   }
 
   _start() {
-    this._running = true;
-    gsap.ticker.add(this._tick.bind(this));
+    this._running   = true;
+    this._boundTick = this._tick.bind(this);
+    gsap.ticker.add(this._boundTick);
     gsap.ticker.fps(60);
   }
 
@@ -45,17 +46,20 @@ export class App {
   }
 
   _bindResize() {
-    window.addEventListener('resize', () => {
+    this._boundResize = () => {
       this._renderer.resize();
       this._camera.resize();
       this._gallery.resize(window.innerWidth, window.innerHeight);
-    });
+    };
+    window.addEventListener('resize', this._boundResize);
   }
 
   destroy() {
     this._running = false;
+    gsap.ticker.remove(this._boundTick);
+    window.removeEventListener('resize', this._boundResize);
+    this._scroll.destroy();
     this._gallery.dispose();
     this._renderer.dispose();
-    this._scroll.destroy();
   }
 }

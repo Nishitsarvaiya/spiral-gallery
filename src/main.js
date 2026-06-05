@@ -83,7 +83,7 @@ function drawFilmStrip(gallery, scroll) {
 }
 
 // ── Ticker ───────────────────────────────────────────────────────
-gsap.ticker.add(() => {
+function uiTick() {
 	const scroll  = app._scroll;
 	const gallery = app._gallery;
 	if (!scroll || !gallery?._items) return;
@@ -108,4 +108,12 @@ gsap.ticker.add(() => {
 	}
 
 	drawFilmStrip(gallery, scroll);
+}
+
+gsap.ticker.add(uiTick);
+
+// ── Cleanup ───────────────────────────────────────────────────────
+window.addEventListener('pagehide', () => {
+	gsap.ticker.remove(uiTick);
+	app.destroy();
 });

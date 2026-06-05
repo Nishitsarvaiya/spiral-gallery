@@ -20,8 +20,12 @@ export class ScrollManager {
     this._snapping      = false;
     this._snapFn        = null;   // set by App after Gallery is ready
 
-    scrollEl.addEventListener('scroll', this._onScroll.bind(this), { passive: true });
-    gsap.ticker.add(this._tick.bind(this));
+    // Store bound references so they can be removed later
+    this._boundOnScroll = this._onScroll.bind(this);
+    this._boundTick     = this._tick.bind(this);
+
+    scrollEl.addEventListener('scroll', this._boundOnScroll, { passive: true });
+    gsap.ticker.add(this._boundTick);
   }
 
   /** @param {function(number): number} fn  — receives smoothOffset, returns snap target */
@@ -72,6 +76,8 @@ export class ScrollManager {
   }
 
   destroy() {
-    gsap.ticker.remove(this._tick.bind(this));
+    gsap.killTweensOf(this);
+    gsap.ticker.remove(this._boundTick);
+    this._el.removeEventListener('scroll', this._boundOnScroll);
   }
 }

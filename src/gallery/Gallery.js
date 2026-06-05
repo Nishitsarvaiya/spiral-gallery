@@ -92,5 +92,6 @@ export class Gallery {
 
   dispose() {
     this._items.forEach((item) => item.dispose(this._scene));
+    this._textures.forEach((tex) => tex.dispose());
   }
 }

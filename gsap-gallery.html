@@ -4,7 +4,10 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Spiral Gallery — GSAP</title>
-		<link rel="stylesheet" href="/src/gsap-gallery/style.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+		<link rel="stylesheet" href="/src/style.css" />
 	</head>
 	<body>
 		<!-- Scroll driver (invisible) -->
@@ -15,11 +18,31 @@
 		<!-- 3D scene -->
 		<div class="gsap-scene" id="js-scene"></div>
 
+		<!-- Brand -->
+		<div class="brand">
+			<span class="brand__text">By Nishit</span>
+		</div>
+
 		<!-- Image counter -->
 		<div class="counter">
 			<span class="counter__current" id="js-counter">01</span>
 			<span class="counter__sep"></span>
 			<span class="counter__total">12</span>
+		</div>
+
+		<!-- Page label -->
+		<div class="page-label">
+			<span class="page-label__title">GSAP</span>
+		</div>
+
+		<!-- Page Links -->
+		<div class="page-links">
+			<div>
+				<a href="/">Three.js</a>
+			</div>
+			<div>
+				<a href="/gsap-gallery">GSAP</a>
+			</div>
 		</div>
 
 		<!-- Minimap -->
