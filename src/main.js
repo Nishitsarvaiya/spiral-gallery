@@ -1,6 +1,7 @@
 import './style.css';
 import gsap from 'gsap';
-import { App } from './core/App.js';
+import { App }          from './core/App.js';
+import { createLoader } from './utils/loader.js';
 
 const PIXELS_PER_CYCLE = 2400;
 const NUM_TEXTURES = 12;
@@ -15,8 +16,9 @@ const MM_W       = minimapEl.width;
 const MM_H       = minimapEl.height;
 
 // ── App ──────────────────────────────────────────────────────────
-const app = new App(document.getElementById('gl-canvas'));
-app.init();
+const loader = createLoader(12);
+const app    = new App(document.getElementById('gl-canvas'));
+app.init(loader.onProgress).then(loader.dismiss);
 
 let activeIdx = -1;
 

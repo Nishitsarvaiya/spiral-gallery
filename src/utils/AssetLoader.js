@@ -13,8 +13,17 @@ export function loadTexture(url) {
   });
 }
 
-export function loadTextures(urls) {
-  return Promise.all(urls.map(loadTexture));
+export function loadTextures(urls, onProgress) {
+  let loaded = 0;
+  return Promise.all(
+    urls.map((url) =>
+      loadTexture(url).then((tex) => {
+        loaded += 1;
+        onProgress?.(loaded, urls.length);
+        return tex;
+      }),
+    ),
+  );
 }
 
 function makeFallback() {

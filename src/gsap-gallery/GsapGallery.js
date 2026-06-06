@@ -25,9 +25,11 @@ function responsiveScale(aspect) {
 }
 
 export class GsapGallery {
-  constructor(scene, imageUrls) {
+  // preloadedImgs: optional array of 12 already-loaded Image elements
+  constructor(scene, imageUrls, preloadedImgs) {
     this._scene     = scene;
     this._imageUrls = imageUrls;
+    this._preloaded = preloadedImgs ?? null;
     this._items     = [];
     this._imgEls    = [];
     this._scalePx   = window.innerHeight / 3;
@@ -49,10 +51,10 @@ export class GsapGallery {
       el.style.width  = `${w}px`;
       el.style.height = `${h}px`;
 
-      const img = document.createElement('img');
-      img.src       = this._imageUrls[texIdx];
-      img.alt       = '';
-      img.draggable = false;
+      // Reuse preloaded image (already cached by browser) or create fresh
+      const img = this._preloaded
+        ? Object.assign(this._preloaded[texIdx].cloneNode(), { draggable: false, alt: '' })
+        : Object.assign(document.createElement('img'), { src: this._imageUrls[texIdx], draggable: false, alt: '' });
       el.appendChild(img);
 
       if (i < NUM_TEXTURES) this._imgEls.push(img);

@@ -15,7 +15,7 @@ export class App {
     this._running = false;
   }
 
-  async init() {
+  async init(onProgress) {
     this._renderer = new Renderer(this._canvas);
     this._camera   = new Camera();
     this._scene    = new THREE.Scene();
@@ -23,7 +23,7 @@ export class App {
     const scrollEl = document.querySelector('.scroll-container');
     this._scroll   = new ScrollManager(scrollEl);
 
-    const textures = await loadTextures(IMAGE_URLS);
+    const textures = await loadTextures(IMAGE_URLS, onProgress);
     this._gallery  = new Gallery(this._scene, this._camera.instance, textures);
     this._gallery.resize(window.innerWidth, window.innerHeight);
 
