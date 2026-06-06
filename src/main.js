@@ -113,7 +113,7 @@ function uiTick() {
 gsap.ticker.add(uiTick);
 
 // ── Cleanup ───────────────────────────────────────────────────────
-window.addEventListener('pagehide', () => {
+window.addEventListener('beforeunload', () => {
 	gsap.ticker.remove(uiTick);
 	app.destroy();
 });

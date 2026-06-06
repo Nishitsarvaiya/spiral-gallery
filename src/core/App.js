@@ -60,6 +60,7 @@ export class App {
     window.removeEventListener('resize', this._boundResize);
     this._scroll.destroy();
     this._gallery.dispose();
+    this._scene.clear();
     this._renderer.dispose();
   }
 }

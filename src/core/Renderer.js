@@ -26,6 +26,8 @@ export class Renderer {
 	}
 
 	dispose() {
+		this.instance.renderLists.dispose();
+		this.instance.forceContextLoss();
 		this.instance.dispose();
 	}
 }
